@@ -35,6 +35,7 @@ dependencies {
 
 	// Spring Boot
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
 	// JUnit
 	testImplementation(platform("org.junit:junit-bom:5.12.2"))

@@ -1,0 +1,7 @@
+---
+
+spring:
+  datasource:
+    password: admin
+    url: jdbc:h2:file:./test
+    username: admin
