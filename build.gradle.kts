@@ -4,6 +4,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.sonarqube") version "7.2.2.6593"
 	id("io.freefair.lombok") version "8.13.1"
+	jacoco
 	checkstyle
 	application
 }
@@ -40,6 +41,8 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter")
 
 }
+
+tasks.jacocoTestReport { reports { xml.required.set(true) } }
 
 sonar {
 	properties {
