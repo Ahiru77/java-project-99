@@ -10,6 +10,7 @@ public class WelcomeController {
     @GetMapping("/welcome")
     @ResponseStatus(HttpStatus.OK)
     public String welcome() {
+
         return "Welcome to Spring";
     }
 }
