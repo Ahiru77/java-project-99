@@ -1,7 +1,7 @@
 run-dist:
 	./build/install/app/bin/app
 run:
-	./gradlew run
+	 ./gradlew run --args='--spring.profiles.active=application-development'
 lint:
 	./gradlew checkstyleMain
 test:

@@ -2,6 +2,9 @@ package hexlet.code.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDate;
 
 @Setter
 @Getter
@@ -14,5 +17,5 @@ public class UserDTO {
 
     private String lastName;
 
-    private String password;
+    private LocalDate createdAt;
 }
