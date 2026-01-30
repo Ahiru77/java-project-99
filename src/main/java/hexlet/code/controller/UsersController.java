@@ -4,6 +4,7 @@ import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserDTO;
 import hexlet.code.util.UserUtils;
 import hexlet.code.repository.UserRepository;
+import hexlet.code.repository.TaskRepository;
 import hexlet.code.dto.UserUpdateDTO;
 import hexlet.code.exception.BadRequestException;
 import hexlet.code.mapper.UserMapper;
@@ -15,10 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/users")
 public class UsersController {
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -27,7 +31,7 @@ public class UsersController {
     private UserUtils userUtils;
 
 
-    @PostMapping("/users")
+    @PostMapping({"", "/"})
     @ResponseStatus(HttpStatus.CREATED)
     UserDTO create(@Valid @RequestBody UserCreateDTO userData) {
         var user = userMapper.map(userData);
@@ -35,14 +39,14 @@ public class UsersController {
         return userMapper.map(user);
     }
 
-    @GetMapping("/users")
+    @GetMapping({"", "/"})
     ResponseEntity<List<UserDTO>> index() {
         var users = repository.findAll();
         var result = users.stream().map(userMapper::map).toList();
         return ResponseEntity.ok().header("X-Total-Count", String.valueOf(users.size())).body(result);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<UserDTO> show(@PathVariable Long id) {
         var user = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
@@ -53,7 +57,7 @@ public class UsersController {
         return ResponseEntity.status(200).body(userDTO);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<UserDTO> update(@RequestBody UserUpdateDTO userData, @PathVariable Long id) {
         var user = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
@@ -71,6 +75,9 @@ public class UsersController {
         var user = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
         if (!repository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        if (taskRepository.existsByAssigneeId(id)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         repository.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
