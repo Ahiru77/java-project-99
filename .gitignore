@@ -49,3 +49,6 @@ bin/
 
 ### JTE ###
 /jte-classes/
+
+### NODE MODULES ###
+/node_modules/
