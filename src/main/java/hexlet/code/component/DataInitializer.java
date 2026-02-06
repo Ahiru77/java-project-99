@@ -4,6 +4,8 @@ import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.TaskStatusRepository;
+import hexlet.code.model.Label;
+import hexlet.code.repository.LabelRepository;
 import java.time.LocalDate;
 import hexlet.code.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
     private final CustomUserDetailsService userService;
     private final TaskStatusRepository taskStatusRepository;
+    private final LabelRepository labelRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -36,6 +39,9 @@ public class DataInitializer implements ApplicationRunner {
         slugCreate("To publish", "to_publish");
         slugCreate("Published", "published");
 
+        labelCreate("feature");
+        labelCreate("bug");
+
     }
 
     public void slugCreate(String name, String slug){
@@ -44,5 +50,12 @@ public class DataInitializer implements ApplicationRunner {
         status.setSlug(slug);
         status.setCreatedAt(LocalDate.now());
         taskStatusRepository.save(status);
+    }
+
+    public void labelCreate(String name){
+        Label label = new Label();
+        label.setName(name);
+        label.setCreatedAt(LocalDate.now());
+        labelRepository.save(label);
     }
 }

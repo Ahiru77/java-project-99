@@ -25,8 +25,8 @@ public class TaskController {
 
     @PostMapping({"", "/"})
     @ResponseStatus(HttpStatus.CREATED)
-    TaskDTO create(@Valid @RequestBody TaskCreateDTO taskStatusData) {
-        var taskData = taskMapper.map(taskStatusData);
+    TaskDTO create(@Valid @RequestBody TaskCreateDTO data) {
+        var taskData = taskMapper.map(data);
         repository.save(taskData);
         return taskMapper.map(taskData);
     }
@@ -44,27 +44,26 @@ public class TaskController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<TaskDTO> show(@PathVariable Long id) {
-        var taskStatus = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
+        var task = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
         if (!repository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        var taskStatusDTO = taskMapper.map(taskStatus);
-        return ResponseEntity.status(200).body(taskStatusDTO);
+        var taskDTO = taskMapper.map(task);
+        return ResponseEntity.status(200).body(taskDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<TaskDTO> update(@RequestBody TaskUpdateDTO taskData, @PathVariable Long id) {
-        var taskStatus = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
-        taskMapper.update(taskData, taskStatus);
-        repository.save(taskStatus);
-        var taskStatusDTO = taskMapper.map(taskStatus);
-        return ResponseEntity.status(200).body(taskStatusDTO);
+        var task = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
+        taskMapper.update(taskData, task);
+        repository.save(task);
+        var taskDTO = taskMapper.map(task);
+        return ResponseEntity.status(200).body(taskDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> destroy(@PathVariable Long id) {
-        var task = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
         if (!repository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

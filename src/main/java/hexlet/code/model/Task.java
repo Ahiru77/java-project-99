@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +36,7 @@ public class Task implements BaseEntity {
     @ToString.Include
     private String description;
 
+    @ToString.Include
     private int index;
 
     @NotNull
@@ -46,10 +49,18 @@ public class Task implements BaseEntity {
     @CreatedDate
     private LocalDate createdAt;
 
-    Long assigneeId() {
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "task_labels",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
+    private Set<Label> labels = new HashSet<>();
+
+    Long getAssigneeId() {
         return this.assignee.getId();
     }
-    Long taskStatusId() {
+    Long getTaskStatusId() {
         return this.taskStatus.getId();
     }
 }

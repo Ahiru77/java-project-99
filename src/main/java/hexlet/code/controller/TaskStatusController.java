@@ -68,7 +68,6 @@ public class TaskStatusController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> destroy(@PathVariable Long id) {
-        var taskStatus = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
         if (!repository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

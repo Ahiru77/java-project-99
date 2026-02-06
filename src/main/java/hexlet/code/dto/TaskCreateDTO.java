@@ -1,9 +1,10 @@
 package hexlet.code.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDate;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -19,4 +20,7 @@ public class TaskCreateDTO {
     private String content;
 
     private String status;
+
+    private Set<String> labels;
 }
+
