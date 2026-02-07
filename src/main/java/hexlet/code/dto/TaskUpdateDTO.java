@@ -21,5 +21,5 @@ public class TaskUpdateDTO {
 
     private String status;
 
-    private Set<String> labels;
+    private Set<Long> labels;
 }

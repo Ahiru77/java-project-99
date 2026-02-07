@@ -20,7 +20,8 @@ import java.util.Set;
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        collectionMappingStrategy = CollectionMappingStrategy.TARGET_IMMUTABLE
 )
 
 public abstract class TaskMapper {
@@ -45,28 +46,21 @@ public abstract class TaskMapper {
     @Mapping(source = "content", target = "description")
     @Mapping(source = "assigneeId", target = "assignee",qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsByName")
+    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsById")
     public abstract Task map(TaskCreateDTO model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
     @Mapping(source = "assigneeId", target = "assignee",qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsByName")
+    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsById")
     public abstract Task map(TaskDTO model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
     @Mapping(source = "assigneeId", target = "assignee",qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsByName")
-    public abstract Task map(TaskUpdateDTO model);
-
-    @Mapping(source = "title", target = "name")
-    @Mapping(source = "content", target = "description")
-    @Mapping(source = "assigneeId", target = "assignee",qualifiedByName = "findUserById")
-    @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsByName")
+    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsById")
     public abstract void update(TaskUpdateDTO update, @MappingTarget Task destination);
 	
     @Named("findStatusBySlug")
@@ -80,25 +74,25 @@ public abstract class TaskMapper {
     }
 
     @Named("findLabelsByTask")
-    protected Set<String> findLabelsByTask(Set<Label> labels) {
+    protected Set<Long> findLabelsByTask(Set<Label> labels) {
         if (labels == null) {
             return new HashSet<>();
         }
-        Set<String> set = new HashSet<>();
+        Set<Long> set = new HashSet<>();
         for (Label label : labels) {
-            set.add(label.getName());
+            set.add(label.getId());
         }
         return set;
     }
 
-    @Named("findLabelsByName")
-    protected Set<Label> findLabelsByName(Set<String> set) {
+    @Named("findLabelsById")
+    protected Set<Label> findLabelsById(Set<Long> set) {
         if (set == null) {
             return new HashSet<>();
         }
         Set<Label> labels = new HashSet<>();
-        for (String name : set) {
-            labelRepository.findByName(name).ifPresent(labels::add);
+        for (Long id : set) {
+            labelRepository.findById(id).ifPresent(labels::add);
         }
         return labels;
     }

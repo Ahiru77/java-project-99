@@ -56,11 +56,4 @@ public class Task implements BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "label_id")
     )
     private Set<Label> labels = new HashSet<>();
-
-    Long getAssigneeId() {
-        return this.assignee.getId();
-    }
-    Long getTaskStatusId() {
-        return this.taskStatus.getId();
-    }
 }

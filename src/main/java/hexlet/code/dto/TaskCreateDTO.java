@@ -21,6 +21,6 @@ public class TaskCreateDTO {
 
     private String status;
 
-    private Set<String> labels;
+    private Set<Long> labels;
 }
 
