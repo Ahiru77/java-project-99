@@ -44,7 +44,7 @@ public class DataInitializer implements ApplicationRunner {
 
     }
 
-    public void slugCreate(String name, String slug){
+    public void slugCreate(String name, String slug) {
         TaskStatus status = new TaskStatus();
         status.setName(name);
         status.setSlug(slug);
@@ -52,7 +52,7 @@ public class DataInitializer implements ApplicationRunner {
         taskStatusRepository.save(status);
     }
 
-    public void labelCreate(String name){
+    public void labelCreate(String name) {
         Label label = new Label();
         label.setName(name);
         label.setCreatedAt(LocalDate.now());

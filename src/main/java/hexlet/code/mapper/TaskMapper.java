@@ -11,7 +11,15 @@ import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.dto.TaskCreateDTO;
 
 import hexlet.code.model.TaskStatus;
-import org.mapstruct.*;
+
+import org.mapstruct.CollectionMappingStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
@@ -39,30 +47,30 @@ public abstract class TaskMapper {
     @Mapping(source = "taskStatus.slug", target = "status")
     @Mapping(source = "name", target = "title")
     @Mapping(source = "description", target = "content")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsByTask")
+    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsByTask")
     public abstract TaskDTO map(Task model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
-    @Mapping(source = "assigneeId", target = "assignee",qualifiedByName = "findUserById")
+    @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsById")
+    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsById")
     public abstract Task map(TaskCreateDTO model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
-    @Mapping(source = "assigneeId", target = "assignee",qualifiedByName = "findUserById")
+    @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsById")
+    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsById")
     public abstract Task map(TaskDTO model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
-    @Mapping(source = "assigneeId", target = "assignee",qualifiedByName = "findUserById")
+    @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels",qualifiedByName = "findLabelsById")
+    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsById")
     public abstract void update(TaskUpdateDTO update, @MappingTarget Task destination);
-	
+
     @Named("findStatusBySlug")
     protected TaskStatus findStatusBySlug(String slug) {
         return taskStatusRepository.findBySlug(slug).orElse(null);
@@ -96,4 +104,4 @@ public abstract class TaskMapper {
         }
         return labels;
     }
-}	
+}

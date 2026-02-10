@@ -7,7 +7,6 @@ import hexlet.code.dto.UserCreateDTO;
 
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
