@@ -2,11 +2,12 @@ package hexlet.code.controller;
 
 import hexlet.code.dto.TaskCreateDTO;
 import hexlet.code.dto.TaskDTO;
-import hexlet.code.model.Task;
+import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.exception.BadRequestException;
 import hexlet.code.mapper.TaskMapper;
+import hexlet.code.specification.TaskSpecification;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class TaskController {
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private TaskSpecification specBuilder;
+
     @PostMapping({"", "/"})
     @ResponseStatus(HttpStatus.CREATED)
     TaskDTO create(@Valid @RequestBody TaskCreateDTO data) {
@@ -32,8 +36,9 @@ public class TaskController {
     }
 
     @GetMapping({"", "/"})
-    ResponseEntity<List<TaskDTO>> index(){
-        var tasks = repository.findAll();
+    ResponseEntity<List<TaskDTO>> index(TaskParamsDTO params){
+        var spec = specBuilder.build(params);
+        var tasks = repository.findAll(spec);
         var result = tasks.stream().map(taskMapper::map).toList();
 
         return ResponseEntity.ok()

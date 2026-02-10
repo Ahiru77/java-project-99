@@ -1,5 +1,6 @@
 package hexlet.code.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class TaskDTO {
 
     private int index;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
 
     @JsonProperty("assignee_id")
@@ -25,6 +27,7 @@ public class TaskDTO {
 
     private String status;
 
+    @JsonProperty("taskLabelIds")
     private Set<Long> labels;
 }
 

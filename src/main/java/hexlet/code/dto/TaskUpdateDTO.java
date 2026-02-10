@@ -10,6 +10,9 @@ import java.util.Set;
 @Getter
 public class TaskUpdateDTO {
 
+    @JsonProperty("taskLabelIds")
+    private Set<Long> labels;
+
     private int index;
 
     @JsonProperty("assignee_id")
@@ -20,6 +23,4 @@ public class TaskUpdateDTO {
     private String content;
 
     private String status;
-
-    private Set<Long> labels;
 }
