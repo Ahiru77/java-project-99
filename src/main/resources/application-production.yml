@@ -8,6 +8,4 @@ spring:
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
