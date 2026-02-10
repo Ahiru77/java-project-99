@@ -4,8 +4,6 @@ spring:
       on-profile: production
   datasource:
     url: ${JDBC_DATABASE_URL}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
