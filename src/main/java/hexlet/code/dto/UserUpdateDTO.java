@@ -1,20 +1,21 @@
 package hexlet.code.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.validation.constraints.NotNull;
 
 @Setter
 @Getter
 public class UserUpdateDTO {
-
+    @NotBlank
     @Email private String email;
 
-    @NotNull private String firstName;
+    private String firstName;
 
-    @NotNull private String lastName;
+    private String lastName;
 
+    @NotBlank
     @Size(min = 3) private String password;
 }

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/labels")
-public class LabelController {
+public class LabelsController {
     @Autowired
     private LabelRepository repository;
 
@@ -61,7 +61,7 @@ public class LabelController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<LabelDTO> update(@RequestBody LabelUpdateDTO taskData, @PathVariable Long id) {
+    ResponseEntity<LabelDTO> update(@Valid @RequestBody LabelUpdateDTO taskData, @PathVariable Long id) {
         var label = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
         labelMapper.update(taskData, label);
         repository.save(label);

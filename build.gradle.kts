@@ -33,6 +33,9 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("org.postgresql:postgresql:42.7.2")
+	implementation("org.instancio:instancio-junit:4.8.1")
+	implementation("net.javacrumbs.json-unit:json-unit-assertj:3.3.0")
+	implementation("net.datafaker:datafaker:2.2.2")
 	runtimeOnly("com.h2database:h2")
 
 	// Spring Boot

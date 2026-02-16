@@ -4,6 +4,8 @@ run:
 	 ./gradlew run --args='--spring.profiles.active=application-development'
 lint:
 	./gradlew checkstyleMain
+tint:
+	./gradlew checkstyleTest
 test:
 	./gradlew test
 build:

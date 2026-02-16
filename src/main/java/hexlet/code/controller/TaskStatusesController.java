@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/task_statuses")
-public class TaskStatusController {
+public class TaskStatusesController {
     @Autowired
     private TaskStatusRepository repository;
 
@@ -65,7 +65,7 @@ public class TaskStatusController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<TaskStatusDTO> update(@RequestBody TaskStatusUpdateDTO taskData, @PathVariable Long id) {
+    ResponseEntity<TaskStatusDTO> update(@Valid @RequestBody TaskStatusUpdateDTO taskData, @PathVariable Long id) {
         var taskStatus = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
         taskStatusMapper.update(taskData, taskStatus);
         repository.save(taskStatus);
