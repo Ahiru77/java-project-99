@@ -6,4 +6,4 @@
 
 [Task Manager](https://java-project-99-0plo.onrender.com/) – система управления задачами, подобная [Redmine](http://www.redmine.org/). Она позволяет ставить задачи, назначать исполнителей и менять их статусы.
 <p></p>
-![img_1.png](img_1.png)
+<img width="1893" height="681" alt="image" src="https://github.com/user-attachments/assets/cbf7d572-d4a3-4154-9e8c-bfa0119c3f57" />
