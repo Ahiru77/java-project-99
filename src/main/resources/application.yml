@@ -29,9 +29,7 @@ springdoc:
       path: /api-docs
 
 sentry:
-  dsn: https://3237ee606d65ea92cec854fd2ed747c8@o4510378102423552.ingest.de.sentry.io/4510378106355792
-  # Add data like request headers and IP for users,
-  # see https://docs.sentry.io/platforms/java/guides/spring-boot/data-management/data-collected/ for more info
+  dsn: https://a87f816791394a7f7acaa20297d11835@o4510864168714240.ingest.de.sentry.io/4510864300245072
   send-default-pii: true
 
 rsa:

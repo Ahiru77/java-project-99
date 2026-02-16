@@ -4,6 +4,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.sonarqube") version "7.2.2.6593"
 	id("io.freefair.lombok") version "8.13.1"
+	id("io.sentry.jvm.gradle") version "6.0.0"
 	jacoco
 	checkstyle
 	application
@@ -37,6 +38,7 @@ dependencies {
 	implementation("net.javacrumbs.json-unit:json-unit-assertj:3.3.0")
 	implementation("net.datafaker:datafaker:2.2.2")
 	runtimeOnly("com.h2database:h2")
+	implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.32.0")
 
 	// Spring Boot
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -73,4 +75,16 @@ sonar {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+bootRun {
+    systemProperty "SENTRY_AUTO_INIT", "false"
+    jvmArgs "-javaagent:${projectDir}/sentry-opentelemetry-agent-8.32.0.jar"
+}
+
+sentry {
+  includeSourceContext = true
+  org = "ahiru77"
+  projectName = "java-spring-boot"
+  authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
