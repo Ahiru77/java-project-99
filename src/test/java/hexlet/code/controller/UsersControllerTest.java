@@ -2,6 +2,7 @@ package hexlet.code.controller;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -158,5 +159,32 @@ public class UsersControllerTest {
         mockMvc.perform(request).andExpect(status().isForbidden());
         var user = userRepository.findById(testUser.getId()).orElseThrow();
         assertThat(user.getEmail()).isNotEqualTo(("mikesmith@gmail.com"));
+    }
+
+    @Test
+    public void testPartialUpdate() throws Exception {
+        var user = userRepository.findByEmail(testUser.getEmail()).orElseThrow();
+        var data = new HashMap<String, String>();
+        data.put("firstName", "New name");
+
+        var request = put("/api/users/{id}", user.getId()).with(token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(data));
+        var result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+        var body = result.getResponse().getContentAsString();
+
+        assertThatJson(body).and(
+                v -> v.node("email").isEqualTo(testUser.getEmail()),
+                v -> v.node("firstName").isEqualTo(data.get("firstName")),
+                v -> v.node("lastName").isEqualTo(testUser.getLastName())
+        );
+
+        var actualUser = userRepository.findByEmail(testUser.getEmail()).orElseThrow();
+
+        assertEquals(data.get("firstName"), actualUser.getFirstName());
+        assertEquals(testUser.getLastName(), actualUser.getLastName());
+        assertEquals(testUser.getEmail(), actualUser.getEmail());
     }
 }
