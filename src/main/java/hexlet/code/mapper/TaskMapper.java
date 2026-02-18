@@ -27,10 +27,10 @@ import java.util.Set;
 
 @Mapper(
         uses = { JsonNullableMapper.class },
+        collectionMappingStrategy = CollectionMappingStrategy.ACCESSOR_ONLY,
         componentModel = MappingConstants.ComponentModel.SPRING,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        collectionMappingStrategy = CollectionMappingStrategy.TARGET_IMMUTABLE
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 
 public abstract class TaskMapper {
