@@ -58,9 +58,6 @@ public class TasksController {
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<TaskDTO> show(@PathVariable Long id) {
         var task = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
-        if (!repository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         var taskDTO = taskMapper.map(task);
         return ResponseEntity.status(200).body(taskDTO);
     }
