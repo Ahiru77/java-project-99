@@ -59,9 +59,6 @@ public class UsersController {
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<UserDTO> show(@PathVariable Long id) {
         var user = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
-        if (!repository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         var userDTO = userMapper.map(user);
         return ResponseEntity.status(200).body(userDTO);
     }
@@ -71,9 +68,6 @@ public class UsersController {
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<UserDTO> update(@Valid @RequestBody UserUpdateDTO userData, @PathVariable Long id) {
         var user = repository.findById(id).orElseThrow(() -> new BadRequestException("Not Found"));
-//        if (!userUtils.getCurrentUser().getId().equals(id)) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//        }
         userMapper.update(userData, user);
         repository.save(user);
         var userDTO = userMapper.map(user);
@@ -86,9 +80,6 @@ public class UsersController {
         if (!repository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-//        if (taskRepository.existsByAssigneeId(id)) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
         repository.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
