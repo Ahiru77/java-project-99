@@ -27,6 +27,7 @@ import jakarta.transaction.Transactional;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -142,14 +143,14 @@ public class LabelsControllerTest {
         var labelId = (labelRepository.findByName(testLabel.getName()).orElseThrow()).getId();
 
         var data = new LabelUpdateDTO();
-        data.setName("New label");
+        data.setName(JsonNullable.of("New label"));
 
         var request = put("/api/labels/" + labelId)
                 .with(token).contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(data));
         mockMvc.perform(request).andExpect(status().isOk());
         var updateLabel = labelRepository.findById(labelId).orElseThrow();
-        assertThat(updateLabel.getName()).isEqualTo(data.getName());
+        assertThat(updateLabel.getName()).isEqualTo("New label");
     }
 
     @Test
@@ -159,7 +160,7 @@ public class LabelsControllerTest {
         var labelId = (labelRepository.findByName(testLabel.getName()).orElseThrow()).getId();
 
         var data = new LabelUpdateDTO();
-        data.setName("New label");
+        data.setName(JsonNullable.of("New label"));
 
         var request = put("/api/labels/" + labelId).contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(data));
@@ -167,7 +168,7 @@ public class LabelsControllerTest {
         mockMvc.perform(request).andExpect(status().isUnauthorized());
 
         var updateLabel = labelRepository.findById(labelId).orElseThrow();
-        assertThat(updateLabel.getName()).isNotEqualTo(data.getName());
+        assertThat(updateLabel.getName()).isNotEqualTo("New label");
     }
 
     @Test
@@ -176,13 +177,13 @@ public class LabelsControllerTest {
         var labelId = (labelRepository.findByName(testLabel.getName()).orElseThrow()).getId();
 
         var data = new LabelUpdateDTO();
-        data.setName("Up");
+        data.setName(JsonNullable.of("Up"));
 
         var request = put("/api/labels/" + labelId)
                 .with(token).contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(data));
         mockMvc.perform(request).andExpect(status().isBadRequest());
         var updateLabel = labelRepository.findById(labelId).orElseThrow();
-        assertThat(updateLabel.getName()).isNotEqualTo(data.getName());
+        assertThat(updateLabel.getName()).isNotEqualTo("Up");
     }
 }
