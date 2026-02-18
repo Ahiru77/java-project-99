@@ -74,12 +74,12 @@ public abstract class TaskMapper {
 
     @Named("findStatusBySlug")
     protected TaskStatus findStatusBySlug(String slug) {
-        return taskStatusRepository.findBySlug(slug).orElse(null);
+        return slug == null ? null : taskStatusRepository.findBySlug(slug).orElse(null);
     }
 
     @Named("findUserById")
     protected User findUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return id == null ? null : userRepository.findById(id).orElse(null);
     }
 
     @Named("findLabelsByTask")
