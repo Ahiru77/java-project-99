@@ -48,28 +48,28 @@ public abstract class TaskMapper {
     @Mapping(source = "taskStatus.slug", target = "status")
     @Mapping(source = "name", target = "title")
     @Mapping(source = "description", target = "content")
-    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsByTask")
+    @Mapping(source = "labels", target = "taskLabelIds", qualifiedByName = "findLabelsByTask")
     public abstract TaskDTO map(Task model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
     @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsById")
+    @Mapping(source = "taskLabelIds", target = "labels", qualifiedByName = "findLabelsById")
     public abstract Task map(TaskCreateDTO model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
     @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsById")
+    @Mapping(source = "taskLabelIds", target = "labels", qualifiedByName = "findLabelsById")
     public abstract Task map(TaskDTO model);
 
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
     @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "findUserById")
     @Mapping(source = "status", target = "taskStatus", qualifiedByName = "findStatusBySlug")
-    @Mapping(source = "labels", target = "labels", qualifiedByName = "findLabelsById")
+    @Mapping(source = "taskLabelIds", target = "labels", qualifiedByName = "findLabelsById")
     public abstract void update(TaskUpdateDTO update, @MappingTarget Task destination);
 
     @Named("findStatusBySlug")

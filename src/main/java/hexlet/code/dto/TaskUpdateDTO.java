@@ -12,8 +12,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 @Getter
 public class TaskUpdateDTO {
 
-    @JsonProperty("taskLabelIds")
-    private Set<Long> labels;
+    private Set<Long> taskLabelIds;
 
     private JsonNullable<Integer> index;
 
