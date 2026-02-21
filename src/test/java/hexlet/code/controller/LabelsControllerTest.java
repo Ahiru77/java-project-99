@@ -23,7 +23,6 @@ import hexlet.code.repository.LabelRepository;
 import hexlet.code.util.ModelGenerator;
 import java.nio.charset.StandardCharsets;
 
-import jakarta.transaction.Transactional;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 public class LabelsControllerTest {
@@ -76,11 +74,12 @@ public class LabelsControllerTest {
 
     @BeforeEach
     public void setUp() {
-        userRepository.deleteAll();
+        taskRepository.deleteAll();
         labelRepository.deleteAll();
+        userRepository.deleteAll();
+
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
                 .apply(springSecurity()).build();
-
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
         userRepository.save(testUser);
         token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));

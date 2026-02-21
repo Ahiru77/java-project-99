@@ -99,10 +99,6 @@ public abstract class TaskMapper {
         if (set == null) {
             return new HashSet<>();
         }
-        Set<Label> labels = new HashSet<>();
-        for (Long id : set) {
-            labelRepository.findById(id).ifPresent(labels::add);
-        }
-        return labels;
+        return labelRepository.findByIdIn(set);
     }
 }

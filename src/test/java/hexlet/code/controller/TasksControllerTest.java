@@ -10,15 +10,17 @@ import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.util.ModelGenerator;
-import jakarta.transaction.Transactional;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -39,7 +41,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TasksControllerTest {
@@ -77,10 +78,11 @@ public class TasksControllerTest {
 
     private User testUser;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @BeforeEach
     public void setUp() {
-        userRepository.deleteAll();
-        taskRepository.deleteAll();
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
                 .apply(springSecurity()).build();
 
@@ -89,6 +91,11 @@ public class TasksControllerTest {
         token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
 
         testTask = Instancio.of(modelGenerator.getTaskModel()).create();
+    }
+
+    @AfterEach
+    void tearDown() {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "task_labels", "tasks", "labels", "task_statuses", "users");
     }
 
     @Test
@@ -182,7 +189,7 @@ public class TasksControllerTest {
                 .content(om.writeValueAsString(data));
         mockMvc.perform(request).andExpect(status().isOk());
 
-        var updateTask = taskRepository.findById(taskId).orElseThrow();
+        var updateTask = taskRepository.findWithLabelsById(taskId).orElseThrow();
         assertThat(updateTask.getIndex()).isEqualTo(data.get("index"));
         assertThat(updateTask.getAssignee().getId()).isEqualTo(data.get("assignee_id"));
         assertThat(updateTask.getName()).isEqualTo(data.get("title"));

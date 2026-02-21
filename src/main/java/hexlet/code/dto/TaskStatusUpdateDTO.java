@@ -1,6 +1,5 @@
 package hexlet.code.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,7 +14,6 @@ public class TaskStatusUpdateDTO {
     private JsonNullable<String> name;
 
     @NotBlank
-    @Column(unique = true)
     @Size(min = 1)
     private JsonNullable<String> slug;
 }
