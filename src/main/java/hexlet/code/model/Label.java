@@ -6,15 +6,12 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
 import jakarta.validation.constraints.NotBlank;
@@ -43,7 +40,4 @@ public class Label implements BaseEntity {
 
     @CreatedDate
     private LocalDate createdAt;
-
-    @ManyToMany(mappedBy = "labels")
-    private Set<Task> tasks = new HashSet<>();
 }

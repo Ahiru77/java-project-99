@@ -11,9 +11,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.mapper.LabelMapper;
 import hexlet.code.model.User;
+import hexlet.code.dto.LabelDTO;
 import hexlet.code.dto.LabelUpdateDTO;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
@@ -22,7 +24,9 @@ import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.util.ModelGenerator;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -118,12 +122,11 @@ public class LabelsControllerTest {
                 .andExpect(status().isOk()).andReturn()
                 .getResponse();
         var body = response.getContentAsString();
-
-        assertThatJson(body).and(v -> {
-            v.node("[0].id").isEqualTo(testLabel.getId());
-            v.node("[0].name").isEqualTo(testLabel.getName());
-            v.node("[0].createdAt").isEqualTo(testLabel.getCreatedAt().toString());
+        List<LabelDTO> labelsDTOS = om.readValue(body, new TypeReference<>() {
         });
+        var actual = labelsDTOS.stream().map(labelMapper::map).toList();
+        var expected = labelRepository.findAll();
+        Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test

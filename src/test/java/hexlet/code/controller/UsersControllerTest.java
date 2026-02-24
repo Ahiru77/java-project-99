@@ -95,10 +95,8 @@ public class UsersControllerTest {
         var response = mockMvc.perform(get("/api/users").with(jwt())).andExpect(status().isOk()).andReturn()
                 .getResponse();
         var body = response.getContentAsString();
-
         List<UserDTO> userDTOS = om.readValue(body, new TypeReference<>() {
         });
-
         var actual = userDTOS.stream().map(userMapper::map).toList();
         var expected = userRepository.findAll();
         Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
