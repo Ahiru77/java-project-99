@@ -1,6 +1,8 @@
 package hexlet.code.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.mapper.TaskStatusMapper;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.Task;
@@ -9,6 +11,7 @@ import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.util.ModelGenerator;
+import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
@@ -113,18 +117,15 @@ public class TaskStatusesControllerTest {
     @Test
     public void testIndex() throws Exception {
         taskStatusRepository.save(testTaskStatus);
-
         var response = mockMvc.perform(get("/api/task_statuses").with(token))
                 .andExpect(status().isOk()).andReturn()
                 .getResponse();
         var body = response.getContentAsString();
-
-        assertThatJson(body).and(v -> {
-            v.node("[0].id").isEqualTo(testTaskStatus.getId());
-            v.node("[0].name").isEqualTo(testTaskStatus.getName());
-            v.node("[0].slug").isEqualTo(testTaskStatus.getSlug());
-            v.node("[0].createdAt").isEqualTo(testTaskStatus.getCreatedAt().toString());
+        List<TaskStatusDTO> taskStatusesDTOS = om.readValue(body, new TypeReference<>() {
         });
+        var actual = taskStatusesDTOS.stream().map(taskStatusMapper::map).toList();
+        var expected = taskStatusRepository.findAll();
+        Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test

@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("@userUtils.getCurrentUser().getId() == #id")
     public UserDTO update(UserUpdateDTO data, Long id) {
         var user = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
@@ -49,7 +48,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("@userUtils.getCurrentUser().getId() == #id")
     public void destroy(Long id) {
         var user = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));

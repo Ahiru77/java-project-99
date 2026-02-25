@@ -1,6 +1,8 @@
 package hexlet.code.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.dto.TaskDTO;
 import hexlet.code.mapper.TaskMapper;
 import hexlet.code.model.Task;
 import hexlet.code.model.User;
@@ -10,6 +12,7 @@ import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.util.ModelGenerator;
+import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -125,23 +129,15 @@ public class TasksControllerTest {
     @Test
     public void testIndex() throws Exception {
         taskRepository.save(testTask);
-
         var response = mockMvc.perform(get("/api/tasks").with(token))
                 .andExpect(status().isOk()).andReturn()
                 .getResponse();
         var body = response.getContentAsString();
-
-        assertThatJson(body).and(v -> {
-            v.node("[0].id").isEqualTo(testTask.getId());
-            v.node("[0].title").isEqualTo(testTask.getName());
-            v.node("[0].index").isEqualTo(testTask.getIndex());
-            v.node("[0].content").isEqualTo(testTask.getDescription());
-            v.node("[0].status").isEqualTo(testTask.getTaskStatus().getSlug());
-            v.node("[0].assignee_id").isEqualTo(testTask.getAssignee().getId());
-            v.node("[0].createdAt").isEqualTo(testTask.getCreatedAt().toString());
-            v.node("[0].taskLabelIds")
-                    .isEqualTo(testTask.getLabels().stream().map(Label::getId).collect(Collectors.toSet()));
+        List<TaskDTO> tasksDTOS = om.readValue(body, new TypeReference<>() {
         });
+        var actual = tasksDTOS.stream().map(taskMapper::map).toList();
+        var expected = taskRepository.findAll();
+        Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
